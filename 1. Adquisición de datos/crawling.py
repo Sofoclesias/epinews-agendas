@@ -43,15 +43,19 @@ def cdc_pdfs(año):
     
     '''
     Si hubieran ocurrido errores durante la extracción de los archivos .zip, se exportará
-    el log de errores para resolución manual.
+    el log de errores para resolución manual en la carpeta de pdfs/. Si se mantiene vacío,
+    no se exportará.
     '''
-    
-    with open(os.path.join(año_dir,f'{año}_errors.txt','a')) as f:
-        f.writelines(errors)
+    if errors=='':
+        pass
+    else:    
+        with open(os.path.join('pdfs',f'{año}_errors.txt'),'a') as f:
+            f.writelines(errors)
+            print(f'Errores en el año {año}. Mirar el log en "pdfs/" para más información.')
 
 if __name__=='__main__':
     '''
-    Solo se utiliza el código directamente desde este script para actualizar semanalmentes
+    Solo se utiliza el código directamente desde este script para actualizar semanalmente
     con los nuevos reportes. 
     '''
     cdc_pdfs(2024)

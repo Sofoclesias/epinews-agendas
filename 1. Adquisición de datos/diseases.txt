@@ -1,0 +1,29 @@
+antrax
+bartonelosis
+carbunco
+chagas
+chikungunya -dengue -zika
+covid19
+dengue
+difteria
+eda
+fiebre amarilla
+hepatitis b
+influenza aviar
+iras
+leishmaniosis
+leptospirosis
+loxoscelismo
+malaria
+meningitis
+neumonia
+ofidismo
+parotiditis
+peste bubonica
+pfa
+rabia
+asma
+tetanos
+tos ferina
+varicela
+zika

@@ -1,3 +1,5 @@
 1. Adquisición de datos/pdfs/
 .venv/
 __pycache__/
+logs/
+*.zip

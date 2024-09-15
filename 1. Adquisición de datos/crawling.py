@@ -49,9 +49,10 @@ def cdc_pdfs(año):
     if errors=='':
         pass
     else:    
-        with open(os.path.join('pdfs',f'{año}_errors.txt'),'a') as f:
+        os.makedirs('logs',exist_ok=True)
+        with open(os.path.join('logs',f'{año}_errors.txt'),'a') as f:
             f.writelines(errors)
-            print(f'Errores en el año {año}. Mirar el log en "pdfs/" para más información.')
+            print(f'Errores en el año {año}. Mirar el log para más información.')
 
 if __name__=='__main__':
     '''

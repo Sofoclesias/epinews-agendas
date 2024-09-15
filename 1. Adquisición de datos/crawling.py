@@ -34,6 +34,8 @@ Options:
 service = Service("/snap/bin/geckodriver")
 options = Options()
 options.add_argument('--headless')
+options.add_argument('--no-sandbox')  # Often necessary on Linux
+options.add_argument('--disable-dev-shm-usage')  # Overcomes limited resource problems
 options.set_preference('permissions.default.image',2)
 
 def cdc_pdfs(año):
@@ -87,14 +89,10 @@ def cdc_pdfs(año):
             f.writelines(errors)
             print(f'Errores en el año {año}. Mirar el log para más información.')
 
-def google_crawl(disease,query,lock):
+def google_crawl(disease,query):
     '''
-    Esta función acumula todos los hipervínculos hallados para el query de una enfermedad. La estructura
-    separada de 'disease' y 'query' está ingeniada para ser procesado con multiprocessing.
-
-    El parámetro lock, heredado del objeto Manager de la librería multiprocessing, permitirá generar una
-    cola de espera para la actualización de escritura de archivos y que, por ende, no se genere un error
-    o corrupción del archivo exportado final.
+    Esta función acumula todos los hipervínculos hallados para el query de una enfermedad en las
+    noticias de Google.
     '''
     
     def get_source(url):
@@ -104,7 +102,9 @@ def google_crawl(disease,query,lock):
         '''
         
         driver = webdriver.Firefox(service=service,options=options)
+        driver.implicitly_wait(10)
         driver.get(url)
+        
         time.sleep(uniform(0.5,1.9))
         soup = bs(driver.page_source, 'html.parser')
         driver.close()
@@ -129,13 +129,14 @@ def google_crawl(disease,query,lock):
         
         i = 2
         collection = {
-            'data':[],
+            'disease':[],
             'link':[],
             'date':[]
         }
         
         while True:
             latestSoup = get_source(url)
+            time.sleep(3)
             
             # Si el enlace provisto genera resultados.
             if latestSoup.find_all('a',{'class':'WlydOe'}):
@@ -158,22 +159,11 @@ def google_crawl(disease,query,lock):
         return pd.DataFrame(collection)
     
     df = crawler(google_url('peru AND ' + disease + query))
+    df.to_csv('urls.csv',index=False, mode='a', header=not os.path.exists('urls.csv'))
     
-    # Cola de espera para la exportación de los datos obtenidos.
-    with lock:
-        df.to_csv('urls.csv',index=False, mode='a', header=not os.path.exists('urls.csv'))
-
-def news_links(prompt: str,cpu: int=6):
-    '''
-    Esta función integra la arquitectura de multiprocessing para la recopilación de los archivos. Dado
-    una enfermedad (que sería una prompt) y, de ser requerido, indicando el número de procesos paralelos
-    que se quiere implementar (cpu), la función de google_crawl se ejecutará en simultáneo cpu veces hasta
-    acabar con los elementos dados en la lista.
-    '''
-    
-    def resolve_date(datetuple):
+def resolve_date(datetuple):
         '''
-        
+        Formato de fecha para query.
         '''
         
         year, month = datetuple
@@ -181,27 +171,7 @@ def news_links(prompt: str,cpu: int=6):
         if month!=12:
             return f' after:{year}-{str(month).zfill(2)}-01 before:{year}-{str(month + 1).zfill(2)}-01'
         else:
-            return f' after:{year}-{month}-01 before:{year + 1}-01-01'
-    
-    datecombo = list(product(range(2005,2025),range(1,13)))
-    
-    with mp.Manager() as manager:
-        '''
-        Como la función exporta los archivos bajo la misma url, es necesario establecer una cola de escritura
-        para evitar corrupciones o errores en el código. Por ello, se activa un objeto Manager para correr un
-        servidor virtual donde se ejecutarán las funciones y se preservará la regla del Lock.
-        '''
-        
-        l = manager.Lock()
-        queries = [(prompt,resolve_date(datetuple),l) for datetuple in datecombo]
-
-        with mp.Pool(processes=cpu) as pool:
-            '''
-            Inicio del multiprocessing.
-            Sobre un máximo de cpu procesos, se ejecutarán las funciones cada vez que un núcleo se libere de tareas.
-            '''
-            
-            pool.starmap(google_crawl,queries)
+            return f' after:{year}-{month}-01 before:{year + 1}-01-01'  
 
 if __name__=='__main__':
     '''

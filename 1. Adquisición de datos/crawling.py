@@ -142,7 +142,7 @@ def google_crawl(disease,query):
             if latestSoup.find_all('a',{'class':'WlydOe'}):
                 for page in latestSoup.find_all('a',{'class':'WlydOe'}):
                     collection['disease'] += [disease]
-                    collection['link'] += [page.url]
+                    collection['link'] += [page.get('href')]
                     collection['date'] += [page.find_all('span')[-1].text]
 
                 next_page = latestSoup.find('a',{'aria-label':f'Page {i}'})
@@ -159,7 +159,7 @@ def google_crawl(disease,query):
         return pd.DataFrame(collection)
     
     df = crawler(google_url('peru AND ' + disease + query))
-    df.to_csv('urls.csv',index=False, mode='a', header=not os.path.exists('urls.csv'))
+    df.to_csv(f'{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'{disease}_urls.csv'))
     
 def resolve_date(datetuple):
         '''

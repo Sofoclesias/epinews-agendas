@@ -10,7 +10,6 @@ información. Los outputs de este archivos son los archivos crudos.
 ### Librerías utilizadas
 from selenium import webdriver                              # Scraping
 from selenium.webdriver.firefox.options import Options      # Scraping
-from selenium.webdriver.firefox.service import Service      # Scraping
 from bs4 import BeautifulSoup as bs                         # Scraping
 import requests                                             # Scraping
 import os                                                   # Manejo de archivos
@@ -31,11 +30,8 @@ Options:
     - 'permissions.default.image:2'                     : Bloquea la carga de las imágenes.
 '''
 
-service = Service("/snap/bin/geckodriver")
 options = Options()
 options.add_argument('--headless')
-options.add_argument('--no-sandbox')  # Often necessary on Linux
-options.add_argument('--disable-dev-shm-usage')  # Overcomes limited resource problems
 options.set_preference('permissions.default.image',2)
 
 def cdc_pdfs(año):
@@ -101,11 +97,11 @@ def google_crawl(disease,query):
         utiliza un driver de Selenium para ingresar a la página de búsqueda y recoger el código HTML.
         '''
         
-        driver = webdriver.Firefox(service=service,options=options)
+        driver = webdriver.Firefox(options=options)
         driver.implicitly_wait(10)
         driver.get(url)
         
-        time.sleep(uniform(0.5,1.9))
+        time.sleep(3)
         soup = bs(driver.page_source, 'html.parser')
         driver.close()
 
@@ -118,9 +114,12 @@ def google_crawl(disease,query):
         search?q    : query de consulta para el buscador. Para ser aceptados, los espacios deben ser "+".
         tbm=nws     : sección de noticias.
         tbs=sbd:1   : ordenamiento de resultados por fecha.
+        lr=lang_es  : resultados en lenguaje español
+        cr=countryPE: resultados de Perú
         '''
 
-        return f'https://www.google.com/search?q={prompt.replace(' ','+')}&tbm=nws&tbs=sbd:1'
+        full = prompt.replace(' ','+')
+        return f'https://www.google.com/search?q={full}&tbm=nws&tbs=sbd:1&lr=lang_es&cr=countryPE'
     
     def crawler(url):
         '''
@@ -134,28 +133,31 @@ def google_crawl(disease,query):
             'date':[]
         }
         
-        while True:
-            latestSoup = get_source(url)
-            time.sleep(3)
-            
-            # Si el enlace provisto genera resultados.
-            if latestSoup.find_all('a',{'class':'WlydOe'}):
-                for page in latestSoup.find_all('a',{'class':'WlydOe'}):
-                    collection['disease'] += [disease]
-                    collection['link'] += [page.get('href')]
-                    collection['date'] += [page.find_all('span')[-1].text]
-
-                next_page = latestSoup.find('a',{'aria-label':f'Page {i}'})
+        try:
+            while True:
+                latestSoup = get_source(url)
+                time.sleep(3)
                 
-                # Si existe una página luego del parseado.
-                if next_page:
-                    url = next_page.get('href')
-                    i += 1
+                # Si el enlace provisto genera resultados.
+                if latestSoup.find_all('a',{'class':'WlydOe'}):
+                    for page in latestSoup.find_all('a',{'class':'WlydOe'}):
+                        collection['disease'] += [disease]
+                        collection['link'] += [page.get('href')]
+                        collection['date'] += [page.find_all('span')[-1].text]
+
+                    next_page = latestSoup.find('a',{'aria-label':f'Page {i}'})
+                    
+                    # Si existe una página luego del parseado.
+                    if next_page:
+                        url = next_page.get('href')
+                        i += 1
+                    else:
+                        break
                 else:
                     break
-            else:
-                break
-            
+        except Exception as e:
+            print(f'Error: {e}')
+      
         return pd.DataFrame(collection)
     
     df = crawler(google_url('peru AND ' + disease + query))

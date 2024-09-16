@@ -1,11 +1,42 @@
-import requests
-import os
-import zipfile
-from io import BytesIO
+'''
+ESTE ES EL CÓDIGO PARA FUNCIONES DE CRAWLING.
+
+Aquí se depositan las funciones utilizadas exclusivamente para
+recopilar los archivos PDF o los enlaces de las noticias. Para
+este punto, ninguna función ingresa, recopila o preprocesa la
+información. Los outputs de este archivos son los archivos crudos.
+'''
+
+### Librerías utilizadas
+from selenium import webdriver                              # Scraping
+from selenium.webdriver.firefox.options import Options      # Scraping
+from bs4 import BeautifulSoup as bs                         # Scraping
+import requests                                             # Scraping
+import os                                                   # Manejo de archivos
+import zipfile                                              # Manejo de archivos
+from io import BytesIO                                      # Manejo de archivos
+from random import uniform                                  # Utilidad
+from itertools import product                               # Utilidad
+import multiprocessing as mp                                # Utilidad
+import pandas as pd                                         # Utilidad
+import time                                                 # Utilidad
+
+'''
+Parámetros de Selenium utilizados.
+
+Service: indicador del driver para cuando Bisetti ejecute el código en Linux.
+Options:
+    - '--headless'                                      : No abrir la pestaña del driver mientras se ejecuta el código.
+    - 'permissions.default.image:2'                     : Bloquea la carga de las imágenes.
+'''
+
+options = Options()
+options.add_argument('--headless')
+options.set_preference('permissions.default.image',2)
 
 def cdc_pdfs(año):
     '''
-    Esta función está interesada en recoger cada archivo .zip dispuesto en el servidor del CDC. No se
+    Esta función se especializa en recoger cada archivo .zip dispuesto en el servidor del CDC. No se
     revisa el contenido aquí, solo se descarga todo lo que se tenga a disposición para procesarlo
     posteriormente. 
     '''
@@ -54,9 +85,99 @@ def cdc_pdfs(año):
             f.writelines(errors)
             print(f'Errores en el año {año}. Mirar el log para más información.')
 
+def google_crawl(disease,query):
+    '''
+    Esta función acumula todos los hipervínculos hallados para el query de una enfermedad en las
+    noticias de Google.
+    '''
+    
+    def get_source(url):
+        '''
+        Dado que Google tiene implementados captchas para restringir las acciones automatizadas, se 
+        utiliza un driver de Selenium para ingresar a la página de búsqueda y recoger el código HTML.
+        '''
+        
+        driver = webdriver.Firefox(options=options)
+        driver.implicitly_wait(10)
+        driver.get(url)
+        
+        time.sleep(3)
+        soup = bs(driver.page_source, 'html.parser')
+        driver.close()
+
+        return soup
+    
+    def google_url(prompt):
+        '''
+        Configura los parámetros de búsqueda en el URL para facilitar la recolección de noticias.
+        
+        search?q    : query de consulta para el buscador. Para ser aceptados, los espacios deben ser "+".
+        tbm=nws     : sección de noticias.
+        tbs=sbd:1   : ordenamiento de resultados por fecha.
+        lr=lang_es  : resultados en lenguaje español
+        cr=countryPE: resultados de Perú
+        '''
+
+        full = prompt.replace(' ','+')
+        return f'https://www.google.com/search?q={full}&tbm=nws&tbs=sbd:1&lr=lang_es&cr=countryPE'
+    
+    def crawler(url):
+        '''
+        Realiza el recorrido por las paginaciones halladas para registrar todos los enlaces en un Dataframe.
+        '''
+        
+        i = 2
+        collection = {
+            'disease':[],
+            'link':[],
+            'date':[]
+        }
+        
+        try:
+            while True:
+                latestSoup = get_source(url)
+                time.sleep(3)
+                
+                # Si el enlace provisto genera resultados.
+                if latestSoup.find_all('a',{'class':'WlydOe'}):
+                    for page in latestSoup.find_all('a',{'class':'WlydOe'}):
+                        collection['disease'] += [disease]
+                        collection['link'] += [page.get('href')]
+                        collection['date'] += [page.find_all('span')[-1].text]
+
+                    next_page = latestSoup.find('a',{'aria-label':f'Page {i}'})
+                    
+                    # Si existe una página luego del parseado.
+                    if next_page:
+                        url = next_page.get('href')
+                        i += 1
+                    else:
+                        break
+                else:
+                    break
+        except Exception as e:
+            print(f'Error: {e}')
+      
+        return pd.DataFrame(collection)
+    
+    df = crawler(google_url('peru AND ' + disease + query))
+    df.to_csv(f'{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'{disease}_urls.csv'))
+    
+def resolve_date(datetuple):
+        '''
+        Formato de fecha para query.
+        '''
+        
+        year, month = datetuple
+        
+        if month!=12:
+            return f' after:{year}-{str(month).zfill(2)}-01 before:{year}-{str(month + 1).zfill(2)}-01'
+        else:
+            return f' after:{year}-{month}-01 before:{year + 1}-01-01'  
+
 if __name__=='__main__':
     '''
     Solo se utiliza el código directamente desde este script para actualizar semanalmente
     con los nuevos reportes. 
     '''
-    cdc_pdfs(2024)
+    # cdc_pdfs(2024)

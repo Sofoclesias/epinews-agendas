@@ -15,11 +15,9 @@ import requests                                             # Scraping
 import os                                                   # Manejo de archivos
 import zipfile                                              # Manejo de archivos
 from io import BytesIO                                      # Manejo de archivos
-from random import uniform                                  # Utilidad
-from itertools import product                               # Utilidad
-import multiprocessing as mp                                # Utilidad
 import pandas as pd                                         # Utilidad
 import time                                                 # Utilidad
+import datetime
 
 '''
 Parámetros de Selenium utilizados.
@@ -33,6 +31,7 @@ Options:
 options = Options()
 options.add_argument('--headless')
 options.set_preference('permissions.default.image',2)
+dates = [datetime.datetime.fromisocalendar(y,w,1).strftime('%Y-%m-%d') for y in range(2005,2024) for w in range(1,53)]
 
 def cdc_pdfs(año):
     '''
@@ -85,7 +84,7 @@ def cdc_pdfs(año):
             f.writelines(errors)
             print(f'Errores en el año {año}. Mirar el log para más información.')
 
-def google_crawl(disease,query):
+def google_crawl(disease):
     '''
     Esta función acumula todos los hipervínculos hallados para el query de una enfermedad en las
     noticias de Google.
@@ -119,7 +118,7 @@ def google_crawl(disease,query):
         '''
 
         full = prompt.replace(' ','+')
-        return f'https://www.google.com/search?q={full}&tbm=nws&tbs=sbd:1&lr=lang_es&cr=countryPE'
+        return f'https://www.google.com/search?q={full}&tbm=nws&tbs=sbd:1&lr=lang_es&cr=countryPE&hl=es'
     
     def crawler(url):
         '''
@@ -160,20 +159,44 @@ def google_crawl(disease,query):
       
         return pd.DataFrame(collection)
     
-    df = crawler(google_url('peru AND ' + disease + query))
-    df.to_csv(f'{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'{disease}_urls.csv'))
+    for i in range(len(dates)-1):
+        date = f' after:{dates[i]} before:{dates[i+1]}'
+        df = crawler(google_url(disease + date))
+        df.to_csv(f'/content/drive/MyDrive/boto3/urls{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'{disease}_urls.csv'))
+
+import json
+
+def info_json(url):
+    info = {
+        'headline':'',
+        'description':'',
+        'body':'',
+        'keywords':''
+    }
     
-def resolve_date(datetuple):
-        '''
-        Formato de fecha para query.
-        '''
+    try:
+        resp = requests.get(url)
+        scripts = bs(resp.text,'html.parser').find_all('script')
         
-        year, month = datetuple
-        
-        if month!=12:
-            return f' after:{year}-{str(month).zfill(2)}-01 before:{year}-{str(month + 1).zfill(2)}-01'
-        else:
-            return f' after:{year}-{month}-01 before:{year + 1}-01-01'  
+        for script in scripts:
+            if 'application/ld+json' in script.get('type',''):
+                
+                try:
+                    json_data = json.loads(script.string)
+                    
+                    if isinstance(json_data,dict) and '@type' in json_data:
+                        info = {
+                            'headline':json_data.get('headline',''),
+                            'description':json_data.get('description',''),
+                            'body':json_data.get('articleBody',''),
+                            'keywords':json_data.get('keywords','')
+                        }            
+                        return info
+                except json.JSONDecodeError:
+                    continue
+        return info
+    except:
+        return info
 
 if __name__=='__main__':
     '''

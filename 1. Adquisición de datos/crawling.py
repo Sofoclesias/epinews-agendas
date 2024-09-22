@@ -31,7 +31,6 @@ Options:
 options = Options()
 options.add_argument('--headless')
 options.set_preference('permissions.default.image',2)
-dates = [datetime.datetime.fromisocalendar(y,w,1).strftime('%Y-%m-%d') for y in range(2005,2024) for w in range(1,53)]
 
 def cdc_pdfs(año):
     '''
@@ -84,7 +83,7 @@ def cdc_pdfs(año):
             f.writelines(errors)
             print(f'Errores en el año {año}. Mirar el log para más información.')
 
-def google_crawl(disease):
+def google_crawl(disease,date_start: tuple | None = None):
     '''
     Esta función acumula todos los hipervínculos hallados para el query de una enfermedad en las
     noticias de Google.
@@ -159,44 +158,21 @@ def google_crawl(disease):
       
         return pd.DataFrame(collection)
     
+    if date_start:
+        '''
+        date_start = (año, semana)
+        '''
+        year, sem = date_start
+        dates = [datetime.datetime.fromisocalendar(year,w,1).strftime('%Y-%m-%d') for w in range(sem,53)]
+        if year < 2024:
+            dates.extend([datetime.datetime.fromisocalendar(y,w,1).strftime('%Y-%m-%d') for y in range(year,2025) for w in range(1,53)])        
+    else:
+        dates = [datetime.datetime.fromisocalendar(y,w,1).strftime('%Y-%m-%d') for y in range(2005,2025) for w in range(1,53)]   
+    
     for i in range(len(dates)-1):
         date = f' after:{dates[i]} before:{dates[i+1]}'
         df = crawler(google_url(disease + date))
-        df.to_csv(f'/content/drive/MyDrive/boto3/urls{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'{disease}_urls.csv'))
-
-import json
-
-def info_json(url):
-    info = {
-        'headline':'',
-        'description':'',
-        'body':'',
-        'keywords':''
-    }
-    
-    try:
-        resp = requests.get(url)
-        scripts = bs(resp.text,'html.parser').find_all('script')
-        
-        for script in scripts:
-            if 'application/ld+json' in script.get('type',''):
-                
-                try:
-                    json_data = json.loads(script.string)
-                    
-                    if isinstance(json_data,dict) and '@type' in json_data:
-                        info = {
-                            'headline':json_data.get('headline',''),
-                            'description':json_data.get('description',''),
-                            'body':json_data.get('articleBody',''),
-                            'keywords':json_data.get('keywords','')
-                        }            
-                        return info
-                except json.JSONDecodeError:
-                    continue
-        return info
-    except:
-        return info
+        df.to_csv(f'/content/drive/MyDrive/boto3/urls/{disease}_urls.csv',index=False, mode='a', header=not os.path.exists(f'/content/drive/MyDrive/boto3/urls/{disease}_urls.csv'))
 
 if __name__=='__main__':
     '''

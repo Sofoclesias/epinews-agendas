@@ -1,4 +1,5 @@
-1. Adquisición de datos/pdfs/
+pdfs/
+urls/
 .venv/
 __pycache__/
 logs/

@@ -1,0 +1,255 @@
+BASIC TF
+Training ['tf', 'gradientboosting']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 1), 'tf__max_features': 100, 'tf__max_df': 0.75, 'gradientboosting__subsample': 0.6, 'gradientboosting__n_estimators': 200, 'gradientboosting__min_samples_split': 50, 'gradientboosting__min_samples_leaf': 4, 'gradientboosting__max_features': 'log2', 'gradientboosting__max_depth': 100, 'gradientboosting__learning_rate': 0.01}
+Train Acc: 0.7398 (0.0320)
+Test Acc: 0.7134831460674157
+
+Training ['tf', 'rf']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 3), 'tf__max_features': 200, 'tf__max_df': 0.85, 'rf__n_estimators': 300, 'rf__min_samples_split': 10, 'rf__min_samples_leaf': 4, 'rf__max_features': 'sqrt', 'rf__max_depth': 20, 'rf__bootstrap': False}
+Train Acc: 0.7346 (0.0309)
+Test Acc: 0.7359550561797753
+
+Training ['tf', 'extratrees']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.75, 'extratrees__n_estimators': 300, 'extratrees__min_samples_split': 30, 'extratrees__min_samples_leaf': 1, 'extratrees__max_features': 'log2', 'extratrees__max_depth': 50, 'extratrees__bootstrap': False}
+Train Acc: 0.7468 (0.0376)
+Test Acc: 0.7397003745318352
+
+Training ['tf', 'lr']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.75, 'lr__solver': 'liblinear', 'lr__penalty': 'l2', 'lr__max_iter': 1000, 'lr__C': 1}
+Train Acc: 0.7473 (0.0391)
+Test Acc: 0.7247191011235955
+
+Training ['tf', 'dt']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 2), 'tf__max_features': 100, 'tf__max_df': 0.75, 'dt__min_samples_split': 2, 'dt__min_samples_leaf': 15, 'dt__max_features': None, 'dt__max_depth': 30, 'dt__criterion': 'entropy'}
+Train Acc: 0.6596 (0.0242)
+Test Acc: 0.6910112359550562
+
+Training ['tf', 'knn']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 1), 'tf__max_features': 50, 'tf__max_df': 0.75, 'knn__weights': 'uniform', 'knn__p': 1, 'knn__n_neighbors': 20, 'knn__metric': 'euclidean'}
+Train Acc: 0.6531 (0.0351)
+Test Acc: 0.6573033707865169
+
+Training ['tf', 'svm']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.75, 'svm__shrinking': False, 'svm__kernel': 'linear', 'svm__gamma': 'auto', 'svm__degree': 3, 'svm__C': 0.1}
+Train Acc: 0.7534 (0.0382)
+Test Acc: 0.7265917602996255
+
+Training ['tf', 'mlp']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 3), 'tf__max_features': None, 'tf__max_df': 0.85, 'mlp__solver': 'sgd', 'mlp__max_iter': 200, 'mlp__learning_rate_init': 0.01, 'mlp__learning_rate': 'constant', 'mlp__hidden_layer_sizes': (100,), 'mlp__batch_size': 'auto', 'mlp__alpha': 0.001, 'mlp__activation': 'tanh'}
+Train Acc: 0.7590 (0.0361)
+Test Acc: 0.7565543071161048
+
+
+
+STANDARD TF
+Training ['tf', 'scaler', 'gradientboosting']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 2), 'tf__max_features': None, 'tf__max_df': 0.85, 'gradientboosting__subsample': 1.0, 'gradientboosting__n_estimators': 100, 'gradientboosting__min_samples_split': 10, 'gradientboosting__min_samples_leaf': 1, 'gradientboosting__max_features': 'sqrt', 'gradientboosting__max_depth': 20, 'gradientboosting__learning_rate': 0.05}
+Train Acc: 0.7651 (0.0367)
+Test Acc: 0.7602996254681648
+
+Training ['tf', 'scaler', 'rf']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.75, 'rf__n_estimators': 300, 'rf__min_samples_split': 5, 'rf__min_samples_leaf': 2, 'rf__max_features': 'sqrt', 'rf__max_depth': 30, 'rf__bootstrap': True}
+Train Acc: 0.7468 (0.0345)
+Test Acc: 0.7172284644194756
+
+Training ['tf', 'scaler', 'extratrees']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.75, 'extratrees__n_estimators': 200, 'extratrees__min_samples_split': 30, 'extratrees__min_samples_leaf': 2, 'extratrees__max_features': 'sqrt', 'extratrees__max_depth': 50, 'extratrees__bootstrap': False}
+Train Acc: 0.7562 (0.0471)
+Test Acc: 0.7434456928838952
+
+Training ['tf', 'scaler', 'lr']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 3), 'tf__max_features': None, 'tf__max_df': 0.75, 'lr__solver': 'saga', 'lr__penalty': 'l2', 'lr__max_iter': 200, 'lr__C': 100}
+Train Acc: 0.7388 (0.0298)
+Test Acc: 0.7546816479400749
+
+Training ['tf', 'scaler', 'dt']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 1), 'tf__max_features': 100, 'tf__max_df': 0.85, 'dt__min_samples_split': 50, 'dt__min_samples_leaf': 8, 'dt__max_features': None, 'dt__max_depth': 30, 'dt__criterion': 'gini'}
+Train Acc: 0.6976 (0.0352)
+Test Acc: 0.6685393258426966
+
+Training ['tf', 'scaler', 'knn']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 2), 'tf__max_features': 100, 'tf__max_df': 0.85, 'knn__weights': 'uniform', 'knn__p': 1, 'knn__n_neighbors': 20, 'knn__metric': 'euclidean'}
+Train Acc: 0.6686 (0.0332)
+Test Acc: 0.6479400749063671
+
+Training ['tf', 'scaler', 'svm']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.75, 'svm__shrinking': True, 'svm__kernel': 'sigmoid', 'svm__gamma': 'scale', 'svm__degree': 2, 'svm__C': 1}
+Train Acc: 0.7384 (0.0358)
+Test Acc: 0.7116104868913857
+
+Training ['tf', 'scaler', 'mlp']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 3), 'tf__max_features': 200, 'tf__max_df': 0.75, 'mlp__solver': 'sgd', 'mlp__max_iter': 200, 'mlp__learning_rate_init': 0.001, 'mlp__learning_rate': 'adaptive', 'mlp__hidden_layer_sizes': (50, 50), 'mlp__batch_size': 'auto', 'mlp__alpha': 0.01, 'mlp__activation': 'tanh'}
+Train Acc: 0.7285 (0.0255)
+Test Acc: 0.7247191011235955
+
+
+
+TF-IDF
+Training ['tf', 'gradientboosting']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 3), 'tf__max_features': 200, 'tf__max_df': 0.85, 'gradientboosting__subsample': 1.0, 'gradientboosting__n_estimators': 200, 'gradientboosting__min_samples_split': 5, 'gradientboosting__min_samples_leaf': 1, 'gradientboosting__max_features': 'log2', 'gradientboosting__max_depth': 20, 'gradientboosting__learning_rate': 0.1}
+Train Acc: 0.7304 (0.0333)
+Test Acc: 0.7677902621722846
+
+Training ['tf', 'rf']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 2), 'tf__max_features': None, 'tf__max_df': 0.75, 'rf__n_estimators': 300, 'rf__min_samples_split': 10, 'rf__min_samples_leaf': 1, 'rf__max_features': 'sqrt', 'rf__max_depth': 100, 'rf__bootstrap': False}
+Train Acc: 0.7407 (0.0349)
+Test Acc: 0.7902621722846442
+
+Training ['tf', 'extratrees']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.85, 'extratrees__n_estimators': 300, 'extratrees__min_samples_split': 50, 'extratrees__min_samples_leaf': 2, 'extratrees__max_features': 'log2', 'extratrees__max_depth': 30, 'extratrees__bootstrap': True}
+Train Acc: 0.7351 (0.0309)
+Test Acc: 0.7677902621722846
+
+Training ['tf', 'lr']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 2), 'tf__max_features': None, 'tf__max_df': 0.75, 'lr__solver': 'saga', 'lr__penalty': None, 'lr__max_iter': 500, 'lr__C': 100}
+Train Acc: 0.7477 (0.0389)
+Test Acc: 0.7696629213483146
+
+Training ['tf', 'dt']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 2), 'tf__max_features': None, 'tf__max_df': 0.75, 'dt__min_samples_split': 2, 'dt__min_samples_leaf': 4, 'dt__max_features': None, 'dt__max_depth': 30, 'dt__criterion': 'entropy'}
+Train Acc: 0.6653 (0.0367)
+Test Acc: 0.6779026217228464
+
+Training ['tf', 'knn']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.85, 'knn__weights': 'uniform', 'knn__p': 2, 'knn__n_neighbors': 5, 'knn__metric': 'euclidean'}
+Train Acc: 0.6418 (0.0444)
+Test Acc: 0.6479400749063671
+
+Training ['tf', 'svm']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.75, 'svm__shrinking': True, 'svm__kernel': 'rbf', 'svm__gamma': 'scale', 'svm__degree': 4, 'svm__C': 10}
+Train Acc: 0.7459 (0.0332)
+Test Acc: 0.7734082397003745
+
+Training ['tf', 'mlp']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 3), 'tf__max_features': None, 'tf__max_df': 0.85, 'mlp__solver': 'adam', 'mlp__max_iter': 200, 'mlp__learning_rate_init': 0.01, 'mlp__learning_rate': 'constant', 'mlp__hidden_layer_sizes': (50, 50), 'mlp__batch_size': 128, 'mlp__alpha': 0.01, 'mlp__activation': 'tanh'}
+Train Acc: 0.7243 (0.0402)
+Test Acc: 0.7696629213483146
+
+
+
+STANDARD TF-IDF
+Training ['tf', 'scaler', 'gradientboosting']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.75, 'gradientboosting__subsample': 0.6, 'gradientboosting__n_estimators': 100, 'gradientboosting__min_samples_split': 10, 'gradientboosting__min_samples_leaf': 2, 'gradientboosting__max_features': 'log2', 'gradientboosting__max_depth': 20, 'gradientboosting__learning_rate': 0.1}
+Train Acc: 0.7412 (0.0327)
+Test Acc: 0.7602996254681648
+
+Training ['tf', 'scaler', 'rf']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 1), 'tf__max_features': 200, 'tf__max_df': 0.75, 'rf__n_estimators': 200, 'rf__min_samples_split': 5, 'rf__min_samples_leaf': 4, 'rf__max_features': 'sqrt', 'rf__max_depth': None, 'rf__bootstrap': True}
+Train Acc: 0.7210 (0.0446)
+Test Acc: 0.7565543071161048
+
+Training ['tf', 'scaler', 'extratrees']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.85, 'extratrees__n_estimators': 300, 'extratrees__min_samples_split': 5, 'extratrees__min_samples_leaf': 2, 'extratrees__max_features': 'sqrt', 'extratrees__max_depth': 50, 'extratrees__bootstrap': False}
+Train Acc: 0.7426 (0.0311)
+Test Acc: 0.7715355805243446
+
+Training ['tf', 'scaler', 'lr']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 1), 'tf__max_features': 100, 'tf__max_df': 0.75, 'lr__solver': 'liblinear', 'lr__penalty': 'l1', 'lr__max_iter': 1000, 'lr__C': 100}
+Train Acc: 0.7196 (0.0433)
+Test Acc: 0.7471910112359551
+
+Training ['tf', 'scaler', 'dt']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 1), 'tf__max_features': None, 'tf__max_df': 0.85, 'dt__min_samples_split': 50, 'dt__min_samples_leaf': 1, 'dt__max_features': None, 'dt__max_depth': 50, 'dt__criterion': 'gini'}
+Train Acc: 0.6690 (0.0392)
+Test Acc: 0.6928838951310862
+
+Training ['tf', 'scaler', 'knn']
+Best hyperparameters: {'tf__norm': None, 'tf__ngram_range': (1, 2), 'tf__max_features': 200, 'tf__max_df': 0.85, 'knn__weights': 'uniform', 'knn__p': 2, 'knn__n_neighbors': 10, 'knn__metric': 'euclidean'}
+Train Acc: 0.6554 (0.0240)
+Test Acc: 0.6835205992509363
+
+Training ['tf', 'scaler', 'svm']
+Best hyperparameters: {'tf__norm': 'l1', 'tf__ngram_range': (1, 3), 'tf__max_features': None, 'tf__max_df': 0.75, 'svm__shrinking': False, 'svm__kernel': 'linear', 'svm__gamma': 'scale', 'svm__degree': 2, 'svm__C': 1}
+Train Acc: 0.7117 (0.0398)
+Test Acc: 0.7359550561797753
+
+Training ['tf', 'scaler', 'mlp']
+Best hyperparameters: {'tf__norm': 'l2', 'tf__ngram_range': (1, 2), 'tf__max_features': None, 'tf__max_df': 0.85, 'mlp__solver': 'adam', 'mlp__max_iter': 500, 'mlp__learning_rate_init': 0.001, 'mlp__learning_rate': 'constant', 'mlp__hidden_layer_sizes': (50, 50), 'mlp__batch_size': 64, 'mlp__alpha': 0.01, 'mlp__activation': 'tanh'}
+Train Acc: 0.7121 (0.0414)
+Test Acc: 0.7434456928838952
+
+
+
+BASIC W2V
+Training ['w2v', 'gradientboosting']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 200, 'w2v__sg': 1, 'w2v__min_count': 5, 'gradientboosting__subsample': 0.6, 'gradientboosting__n_estimators': 300, 'gradientboosting__min_samples_split': 5, 'gradientboosting__min_samples_leaf': 8, 'gradientboosting__max_features': 'sqrt', 'gradientboosting__max_depth': 10, 'gradientboosting__learning_rate': 0.1}
+Train Acc: 0.7182 (0.0223)
+Test Acc: 0.7715355805243446
+
+Training ['w2v', 'rf']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 500, 'w2v__sg': 1, 'w2v__min_count': 5, 'rf__n_estimators': 100, 'rf__min_samples_split': 2, 'rf__min_samples_leaf': 4, 'rf__max_features': None, 'rf__max_depth': 20, 'rf__bootstrap': True}
+Train Acc: 0.7159 (0.0281)
+Test Acc: 0.7228464419475655
+
+Training ['w2v', 'extratrees']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 200, 'w2v__sg': 1, 'w2v__min_count': 10, 'extratrees__n_estimators': 100, 'extratrees__min_samples_split': 10, 'extratrees__min_samples_leaf': 1, 'extratrees__max_features': None, 'extratrees__max_depth': 10, 'extratrees__bootstrap': False}
+Train Acc: 0.7051 (0.0355)
+Test Acc: 0.7415730337078652
+
+Training ['w2v', 'lr']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 500, 'w2v__sg': 0, 'w2v__min_count': 10, 'lr__solver': 'lbfgs', 'lr__penalty': None, 'lr__max_iter': 500, 'lr__C': 0.1}
+Train Acc: 0.7135 (0.0252)
+Test Acc: 0.7359550561797753
+
+Training ['w2v', 'dt']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 100, 'w2v__sg': 1, 'w2v__min_count': 10, 'dt__min_samples_split': 5, 'dt__min_samples_leaf': 50, 'dt__max_features': None, 'dt__max_depth': 10, 'dt__criterion': 'gini'}
+Train Acc: 0.6319 (0.0393)
+Test Acc: 0.6797752808988764
+
+Training ['w2v', 'knn']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 50, 'w2v__sg': 1, 'w2v__min_count': 10, 'knn__weights': 'distance', 'knn__p': 1, 'knn__n_neighbors': 10, 'knn__metric': 'minkowski'}
+Train Acc: 0.6844 (0.0370)
+Test Acc: 0.7303370786516854
+
+Training ['w2v', 'svm']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 100, 'w2v__sg': 1, 'w2v__min_count': 10, 'svm__shrinking': False, 'svm__kernel': 'poly', 'svm__gamma': 'scale', 'svm__degree': 3, 'svm__C': 10}
+Train Acc: 0.7173 (0.0300)
+Test Acc: 0.7509363295880149
+
+Training ['w2v', 'mlp']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 200, 'w2v__sg': 1, 'w2v__min_count': 1, 'mlp__solver': 'adam', 'mlp__max_iter': 200, 'mlp__learning_rate_init': 0.001, 'mlp__learning_rate': 'adaptive', 'mlp__hidden_layer_sizes': (50,), 'mlp__batch_size': 128, 'mlp__alpha': 0.0001, 'mlp__activation': 'tanh'}
+Train Acc: 0.7173 (0.0289)
+Test Acc: 0.7509363295880149
+
+
+
+STANDARD W2V
+Training ['w2v', 'scaler', 'gradientboosting']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 50, 'w2v__sg': 1, 'w2v__min_count': 5, 'gradientboosting__subsample': 0.6, 'gradientboosting__n_estimators': 300, 'gradientboosting__min_samples_split': 10, 'gradientboosting__min_samples_leaf': 8, 'gradientboosting__max_features': 'sqrt', 'gradientboosting__max_depth': None, 'gradientboosting__learning_rate': 0.2}
+Train Acc: 0.7163 (0.0240)
+Test Acc: 0.7209737827715356
+
+Training ['w2v', 'scaler', 'rf']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 200, 'w2v__sg': 1, 'w2v__min_count': 5, 'rf__n_estimators': 200, 'rf__min_samples_split': 10, 'rf__min_samples_leaf': 15, 'rf__max_features': 'sqrt', 'rf__max_depth': 10, 'rf__bootstrap': False}
+Train Acc: 0.7037 (0.0407)
+Test Acc: 0.7340823970037453
+
+Training ['w2v', 'scaler', 'extratrees']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 500, 'w2v__sg': 1, 'w2v__min_count': 5, 'extratrees__n_estimators': 300, 'extratrees__min_samples_split': 30, 'extratrees__min_samples_leaf': 15, 'extratrees__max_features': None, 'extratrees__max_depth': 100, 'extratrees__bootstrap': False}
+Train Acc: 0.7098 (0.0333)
+Test Acc: 0.7397003745318352
+
+Training ['w2v', 'scaler', 'lr']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 500, 'w2v__sg': 1, 'w2v__min_count': 5, 'lr__solver': 'lbfgs', 'lr__penalty': None, 'lr__max_iter': 200, 'lr__C': 0.01}
+Train Acc: 0.7032 (0.0221)
+Test Acc: 0.7322097378277154
+
+Training ['w2v', 'scaler', 'dt']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 100, 'w2v__sg': 1, 'w2v__min_count': 10, 'dt__min_samples_split': 2, 'dt__min_samples_leaf': 30, 'dt__max_features': None, 'dt__max_depth': 100, 'dt__criterion': 'gini'}
+Train Acc: 0.6409 (0.0295)
+Test Acc: 0.6310861423220974
+
+Training ['w2v', 'scaler', 'knn']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 20, 'w2v__sg': 1, 'w2v__min_count': 10, 'knn__weights': 'distance', 'knn__p': 2, 'knn__n_neighbors': 5, 'knn__metric': 'minkowski'}
+Train Acc: 0.6783 (0.0371)
+Test Acc: 0.7172284644194756
+
+Training ['w2v', 'scaler', 'svm']
+Best hyperparameters: {'w2v__window': 5, 'w2v__vector_size': 500, 'w2v__sg': 1, 'w2v__min_count': 10, 'svm__shrinking': True, 'svm__kernel': 'poly', 'svm__gamma': 'scale', 'svm__degree': 2, 'svm__C': 100}
+Train Acc: 0.7196 (0.0342)
+Test Acc: 0.7415730337078652
+
+Training ['w2v', 'scaler', 'mlp']
+Best hyperparameters: {'w2v__window': 3, 'w2v__vector_size': 100, 'w2v__sg': 1, 'w2v__min_count': 5, 'mlp__solver': 'sgd', 'mlp__max_iter': 500, 'mlp__learning_rate_init': 0.001, 'mlp__learning_rate': 'constant', 'mlp__hidden_layer_sizes': (50,), 'mlp__batch_size': 'auto', 'mlp__alpha': 0.001, 'mlp__activation': 'tanh'}
+Train Acc: 0.7238 (0.0327)
+Test Acc: 0.7640449438202247
